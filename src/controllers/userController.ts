@@ -17,21 +17,24 @@ import passwordUtility from "../utils/password/passwordUtility.ts";
 const createUser = async (req: Request, res: Response) => {
     // 1. 프론트엔드에서 보내온 정보를 편지에서 읽고
     try{
-    const { username, password, nickname, email, phoneNumber, gender, role } = req.body;
+    const { username, password, nickname, email, phoneNumber, gender } = req.body;
 
-    // 2. 그 정보가 옳은지 판단하고
+    // 2. 그 정보가 옳은지 판단하고 (검증)
     // 2-1. 안 맞으면 처리가 안됐다는 내용으로 택배를 보내고
+    const validateUser: UserCreateInput = {
+            username: username,
+            password: password,
+            nickname: nickname,
+            email: email,
+            phoneNumber: phoneNumber,
+            gender: gender,
+        };
 
     //       이미 User 테이블에 등록된 '사용자'라는 뜻을 담은 데이터 덩어리가 아니라
     // 3-0. 데이터베이스에게 보내 줄, 'User 테이블에 추가"할" 데이터'를 만들어줌
     const newUser: UserCreateInput = {
-        username: username,
+        ...validateUser,
         password: await passwordUtility.hashPassword(password),
-        nickname: nickname,
-        email: email,
-        phoneNumber: phoneNumber,
-        gender: gender,
-        role: role,
     };
 
     // 3-1. 데이터 베이스에게 newUser 내용을 저장하도록 요청

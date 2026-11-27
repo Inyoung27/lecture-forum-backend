@@ -6,12 +6,13 @@
 // "prisma"라는 패키지는 schema.prisma를 가지고 셋업하는 일을 하는  패키지
 // "@prisma/client" 패키지는 express에서 prisma로 통신할 수 있게 해주는 패키지
 
+import "dotenv/config";
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { PrismaClient } from "../generated/prisma/client.ts";
 
 // 각각의 접속 정보는 string만 받을 수 있음 (port는 number만)
-// 환경변수에서 가져온 값은 string | undefined 차입이기 떄문에
-// 논리합을 통해 값이 없을 경우 빈 string을 넣도록 좊치
+// 환경변수에서 가져온 값은 string | undefined 타입이기 때문에
+// 논리합을 통해 값이 없을 경우 빈 string을 넣도록 조치
 const adapter = new PrismaMariaDb({
     host: process.env.DATABASE_HOST || "",
     port: Number(process.env.DATABASE_PORT),
